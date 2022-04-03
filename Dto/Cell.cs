@@ -5,10 +5,23 @@ public struct Cell
     private const string FILLED = "#";
     private const string EMPTY = " ";
 
-    public bool IsFilled { get; set; }
+    private bool _isFixated = false;
 
-    public Cell(bool isFilled = false)
+    public int X { get; set; }
+    public int Y { get; set; }
+    public bool IsFilled { get; set; }
+    public bool IsFixated
     {
+        get
+        {
+            return this._isFixated;
+        }
+    }
+
+    public Cell(int x, int y, bool isFilled = false)
+    {
+        this.X = x;
+        this.Y = y;
         this.IsFilled = isFilled;
     }
 
@@ -19,5 +32,13 @@ public struct Cell
     public string Get()
     {
         return this.IsFilled ? FILLED : EMPTY;
+    }
+
+    /// <summary>
+    /// Fixate the cell in its line.
+    /// </summary>
+    public void Fixate()
+    {
+        this._isFixated = true;
     }
 }
