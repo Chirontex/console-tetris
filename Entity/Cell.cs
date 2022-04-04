@@ -1,13 +1,20 @@
-namespace ConsoleTetris.Dto;
+namespace ConsoleTetris.Entity;
 
-public struct Cell
+internal class Cell
 {
     private const string FILLED = "#";
     private const string EMPTY = " ";
 
-    private bool _isFixated = false;
+    protected bool _isFixated = false;
+    protected Row _row;
 
-    public int X { get; set; }
+    public Row Row
+    {
+        get
+        {
+            return this._row;
+        }
+    }
     public int Y { get; set; }
     public bool IsFilled { get; set; }
     public bool IsFixated
@@ -18,9 +25,9 @@ public struct Cell
         }
     }
 
-    public Cell(int x, int y, bool isFilled = false)
+    public Cell(Row row, int y, bool isFilled = false)
     {
-        this.X = x;
+        this._row = row;
         this.Y = y;
         this.IsFilled = isFilled;
     }
@@ -29,9 +36,18 @@ public struct Cell
     /// Returns a string representation of cell.
     /// </summary>
     /// <returns>A character that equivalent to cell state.</returns>
-    public string Get()
+    public string GetAsString()
     {
         return this.IsFilled ? FILLED : EMPTY;
+    }
+
+    /// <summary>
+    /// Returns the cell's row object.
+    /// </summary>
+    /// <returns>The Row instance.</returns>
+    public Row GetRow()
+    {
+        return this._row;
     }
 
     /// <summary>
