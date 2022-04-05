@@ -28,4 +28,39 @@ internal class Field
     {
         return this._rows[rowKey].GetCell(cellKey);
     }
+
+    /// <summary>
+    /// Visualize the field.
+    /// </summary>
+    /// <returns>A string representation of the field.</returns>
+    public string Visualize()
+    {
+        string result = this.getBorder('_') + "\n";
+
+        foreach (Row row in this._rows)
+        {
+            for (int i = 0; i < Row.CELLS_QUANTITY; i++)
+            {
+                result += row.GetCell(i).GetAsString();
+            }
+
+            result += "\n";
+        }
+
+        result += this.getBorder('=') + "\n";
+
+        return result;
+    }
+
+    protected string getBorder(char character)
+    {
+        string result = "";
+
+        for (int i = 0; i < Row.CELLS_QUANTITY; i++)
+        {
+            result += character;
+        }
+
+        return result;
+    }
 }
