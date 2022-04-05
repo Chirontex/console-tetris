@@ -7,6 +7,7 @@ internal class Cell
 
     protected bool _isFixated = false;
     protected Row _row;
+    protected int _y;
 
     public Row Row
     {
@@ -15,7 +16,15 @@ internal class Cell
             return this._row;
         }
     }
-    public int Y { get; set; }
+
+    public int Y
+    {
+        get
+        {
+            return this._y;
+        }
+    }
+
     public bool IsFilled { get; set; }
     public bool IsFixated
     {
@@ -28,7 +37,7 @@ internal class Cell
     public Cell(Row row, int y, bool isFilled = false)
     {
         this._row = row;
-        this.Y = y;
+        this._y = y;
         this.IsFilled = isFilled;
     }
 
