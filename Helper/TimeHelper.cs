@@ -11,7 +11,7 @@ internal class TimeHelper
     {
         if (value < 60)
         {
-            return $"00:00:{(value < 10 ? "0" : "")}{value}";
+            return $"00:00:{handleValue(value)}";
         }
 
         int hours = value / 3600;
@@ -23,11 +23,6 @@ internal class TimeHelper
 
     protected static string handleValue(int value)
     {
-        if (value < 10)
-        {
-            return $"0{value}";
-        }
-
-        return $"{value}";
+        return $"{(value < 10 ? "0" : "")}{value}";
     }
 }
