@@ -4,7 +4,7 @@ namespace ConsoleTetris.Entity;
 
 internal class Row
 {
-    private const int CELLS_QUANTITY = 20;
+    private const int CELLS_QUANTITY = 10;
 
     protected List<Cell> _cells;
 
