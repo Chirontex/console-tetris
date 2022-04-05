@@ -1,4 +1,5 @@
 ﻿using ConsoleTetris.Entity;
+using ConsoleTetris.Helper;
 using System.Threading;
 using System;
 
@@ -14,7 +15,7 @@ public class Program
         while (!gameOver)
         {
             Console.Clear();
-            Console.WriteLine($"Time: {time}");
+            Console.WriteLine($"Time: {TimeHelper.ToTime(time)}");
             Console.WriteLine($"Score: {score}");
             Console.Write(field.Visualize());
 
