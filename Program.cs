@@ -9,19 +9,19 @@ public class Program
     {
         Field field = new();
         bool gameOver = false;
-        int time = 0;
+        int tickCounter = 0;
         int score = 0;
 
         while (!gameOver)
         {
+            Thread.Sleep(1000);
+
             Console.Clear();
-            Console.WriteLine($"Time: {TimeHelper.ToTime(time)}");
+            Console.WriteLine($"Time: {TimeHelper.ToTime(tickCounter)}");
             Console.WriteLine($"Score: {score}");
             Console.Write(field.Visualize());
 
-            Thread.Sleep(1000);
-
-            time++;
+            tickCounter++;
         }
     }
 }
