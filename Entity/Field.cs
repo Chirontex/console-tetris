@@ -39,12 +39,14 @@ internal class Field
 
         foreach (Row row in this._rows)
         {
+            result += "|";
+
             for (int i = 0; i < Row.CELLS_QUANTITY; i++)
             {
                 result += row.GetCell(i).GetAsString();
             }
 
-            result += "\n";
+            result += "|\n";
         }
 
         result += this.getBorder('=') + "\n";
@@ -56,7 +58,7 @@ internal class Field
     {
         string result = "";
 
-        for (int i = 0; i < Row.CELLS_QUANTITY; i++)
+        for (int i = 0; i < Row.CELLS_QUANTITY + 2; i++)
         {
             result += character;
         }
