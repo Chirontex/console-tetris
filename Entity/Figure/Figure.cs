@@ -26,7 +26,38 @@ internal abstract class Figure
 
         this._figureCells = new();
         this.initializeOnField();
+        this.fillCells();
         this._isInitialized = true;
+    }
+
+    /// <summary>
+    /// Move figure down.
+    /// </summary>
+    public void Down()
+    {
+        this.cleanCells();
+
+        List<Cell> newCells = new();
+
+        foreach (Cell cell in this._figureCells)
+        {
+            Cell? newCell = this._field.GetCell(
+                cell.GetRow().Y - 1,
+                cell.X
+            );
+
+            if (newCell == null || newCell.IsFilled)
+            {
+                this.fillCells();
+                this._isDead = true;
+                return;
+            }
+
+            newCells.Add(newCell);
+        }
+
+        this._figureCells = newCells;
+        this.fillCells();
     }
 
     /// <summary>
@@ -47,17 +78,22 @@ internal abstract class Figure
         return this._field.GetCell(
             Field.ROWS_QUANTITY - 1,
             Row.CELLS_QUANTITY/2
-        );
+        )!;
     }
 
-    protected void addCell(Cell cell)
+    protected void fillCells()
     {
-        if (!this._isInitialized && cell.IsFilled)
+        foreach (Cell cell in this._figureCells)
         {
-            throw new GameOverException("A figure field is already filled.");
+            cell.IsFilled = true;
         }
+    }
 
-        cell.IsFilled = true;
-        this._figureCells.Add(cell);
+    protected void cleanCells()
+    {
+        foreach (Cell cell in this._figureCells)
+        {
+            cell.IsFilled = false;
+        }
     }
 }

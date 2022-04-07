@@ -1,4 +1,5 @@
 using ConsoleTetris.Entity;
+using ConsoleTetris.Entity.Figure;
 using ConsoleTetris.Helper;
 using System.Threading;
 using System;
@@ -23,13 +24,26 @@ internal class GameService
     {
         bool gameOver = false;
         int sleep = 1;
+        Figure? figure = null;
 
         while (!gameOver)
         {
             if (sleep == 0)
             {
+                if (figure == null)
+                {
+                    figure = new Crossbar(this._field);
+                }
+
                 this.render();
                 this._tickCounter++;
+
+                figure.Down();
+
+                if (figure.IsDead)
+                {
+                    figure = null;
+                }
 
                 sleep = 1000;
             }

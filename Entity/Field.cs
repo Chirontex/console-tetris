@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace ConsoleTetris.Entity;
 
@@ -23,10 +24,17 @@ internal class Field
     /// </summary>
     /// <param name="rowKey">Row coordinate.</param>
     /// <param name="cellKey">Cell coordinate in row.</param>
-    /// <returns>Cell object.</returns>
-    public Cell GetCell(int rowKey, int cellKey)
+    /// <returns>Cell object or null.</returns>
+    public Cell? GetCell(int rowKey, int cellKey)
     {
-        return this._rows[rowKey].GetCell(cellKey);
+        try
+        {
+            return this._rows[rowKey].GetCell(cellKey);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -37,8 +45,10 @@ internal class Field
     {
         string result = this.getBorder('_') + "\n";
 
-        foreach (Row row in this._rows)
+        for (int k = this._rows.Count - 1; k >= 0; k--)
         {
+            Row row = this._rows[k];
+
             result += "|";
 
             for (int i = 0; i < Row.CELLS_QUANTITY; i++)
