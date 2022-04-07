@@ -7,19 +7,19 @@ internal class Row
     public const int CELLS_QUANTITY = 10;
 
     protected List<Cell> _cells;
-    protected int _x;
+    protected int _y;
 
-    public int X
+    public int Y
     {
         get
         {
-            return this._x;
+            return this._y;
         }
     }
 
-    public Row(int x)
+    public Row(int y)
     {
-        this._x = x;
+        this._y = y;
         this._cells = new();
 
         for (int i = 0; i < CELLS_QUANTITY; i++)

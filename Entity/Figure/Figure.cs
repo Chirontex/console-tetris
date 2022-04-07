@@ -8,6 +8,15 @@ internal abstract class Figure
     protected Field _field;
     protected List<Cell> _figureCells;
     protected bool _isInitialized = false;
+    protected bool _isDead = false;
+
+    public bool IsDead
+    {
+        get
+        {
+            return this._isDead;
+        }
+    }
 
     public Figure(Field field)
     {

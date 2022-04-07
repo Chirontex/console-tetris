@@ -12,7 +12,7 @@ internal class Crossbar : Figure
 
         this.addCell(entryPointCell);
 
-        for (int i = -2; i <= entryPointCell.Y; i++)
+        for (int i = -2; i <= entryPointCell.X; i++)
         {
             if (i == 0)
             {
@@ -21,8 +21,8 @@ internal class Crossbar : Figure
 
             this.addCell(
                 this._field.GetCell(
-                    entryPointCell.GetRow().X,
-                    entryPointCell.Y + i
+                    entryPointCell.GetRow().Y,
+                    entryPointCell.X + i
                 )
             );
         }
