@@ -16,6 +16,12 @@ internal class TimeHelper
 
         ulong hours = value / 3600;
         ulong minutes = value / 60;
+
+        if (hours > 0)
+        {
+            minutes = minutes % hours;
+        }
+
         ulong seconds = value - 60 * (value / 60);
 
         return $"{handleValue(hours)}:{handleValue(minutes)}:{handleValue(seconds)}";
