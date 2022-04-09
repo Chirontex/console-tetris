@@ -5,7 +5,7 @@ namespace ConsoleTetris.Entity;
 
 internal class Field
 {
-    public const int ROWS_QUANTITY = 20;
+    public const byte ROWS_QUANTITY = 20;
 
     protected List<Row> _rows;
 
@@ -13,7 +13,7 @@ internal class Field
     {
         this._rows = new();
 
-        for (int i = 0; i < ROWS_QUANTITY; i++)
+        for (byte i = 0; i < ROWS_QUANTITY; i++)
         {
             this._rows.Add(new Row(i));
         }
@@ -25,7 +25,7 @@ internal class Field
     /// <param name="rowKey">Row coordinate.</param>
     /// <param name="cellKey">Cell coordinate in row.</param>
     /// <returns>Cell object or null.</returns>
-    public Cell? GetCell(int rowKey, int cellKey)
+    public Cell? GetCell(byte rowKey, byte cellKey)
     {
         try
         {
@@ -51,7 +51,7 @@ internal class Field
 
             result += "|";
 
-            for (int i = 0; i < Row.CELLS_QUANTITY; i++)
+            for (byte i = 0; i < Row.CELLS_QUANTITY; i++)
             {
                 result += row.GetCell(i).GetAsString();
             }
@@ -68,7 +68,7 @@ internal class Field
     {
         string result = "";
 
-        for (int i = 0; i < Row.CELLS_QUANTITY + 2; i++)
+        for (byte i = 0; i < Row.CELLS_QUANTITY + 2; i++)
         {
             result += character;
         }

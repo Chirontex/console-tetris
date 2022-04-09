@@ -9,8 +9,8 @@ namespace ConsoleTetris.Service;
 internal class GameService
 {
     protected Field _field;
-    protected int _tickCounter = 0;
-    protected int _score = 0;
+    protected ulong _tickCounter = 0;
+    protected ulong _score = 0;
 
     public GameService(Field field)
     {

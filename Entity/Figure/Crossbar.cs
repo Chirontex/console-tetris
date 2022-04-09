@@ -14,14 +14,17 @@ internal class Crossbar : Figure
 
         this._figureCells.Add(entryPointCell);
 
-        for (int i = -2; i <= 1; i++)
+        for (sbyte i = -2; i <= 1; i++)
         {
             if (i == 0)
             {
                 continue;
             }
 
-            Cell cell = this._field.GetCell(entryPointCell.GetRow().Y, entryPointCell.X + i)!;
+            Cell cell = this._field.GetCell(
+                entryPointCell.GetRow().Y,
+                checked((byte)(entryPointCell.X + i))
+            )!;
 
             if (cell.IsFilled)
             {

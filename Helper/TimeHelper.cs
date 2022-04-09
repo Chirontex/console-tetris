@@ -7,21 +7,21 @@ internal class TimeHelper
     /// </summary>
     /// <param name="value">Seconds.</param>
     /// <returns>Normal time representation.</returns>
-    public static string ToTime(int value)
+    public static string ToTime(ulong value)
     {
         if (value < 60)
         {
             return $"00:00:{handleValue(value)}";
         }
 
-        int hours = value / 3600;
-        int minutes = value / 60;
-        int seconds = value - 60 * (value / 60);
+        ulong hours = value / 3600;
+        ulong minutes = value / 60;
+        ulong seconds = value - 60 * (value / 60);
 
         return $"{handleValue(hours)}:{handleValue(minutes)}:{handleValue(seconds)}";
     }
 
-    protected static string handleValue(int value)
+    protected static string handleValue(ulong value)
     {
         return $"{(value < 10 ? "0" : "")}{value}";
     }

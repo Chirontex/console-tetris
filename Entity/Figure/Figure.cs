@@ -42,7 +42,7 @@ internal abstract class Figure
         foreach (Cell cell in this._figureCells)
         {
             Cell? newCell = this._field.GetCell(
-                cell.GetRow().Y - 1,
+                checked((byte)(cell.GetRow().Y - 1)),
                 cell.X
             );
 

@@ -7,7 +7,7 @@ internal class Cell
 
     protected bool _isFixated = false;
     protected Row _row;
-    protected int _x;
+    protected byte _x;
 
     public Row Row
     {
@@ -17,7 +17,7 @@ internal class Cell
         }
     }
 
-    public int X
+    public byte X
     {
         get
         {
@@ -34,7 +34,7 @@ internal class Cell
         }
     }
 
-    public Cell(Row row, int x, bool isFilled = false)
+    public Cell(Row row, byte x, bool isFilled = false)
     {
         this._row = row;
         this._x = x;

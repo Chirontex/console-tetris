@@ -4,12 +4,12 @@ namespace ConsoleTetris.Entity;
 
 internal class Row
 {
-    public const int CELLS_QUANTITY = 10;
+    public const byte CELLS_QUANTITY = 10;
 
     protected List<Cell> _cells;
-    protected int _y;
+    protected byte _y;
 
-    public int Y
+    public byte Y
     {
         get
         {
@@ -17,12 +17,12 @@ internal class Row
         }
     }
 
-    public Row(int y)
+    public Row(byte y)
     {
         this._y = y;
         this._cells = new();
 
-        for (int i = 0; i < CELLS_QUANTITY; i++)
+        for (byte i = 0; i < CELLS_QUANTITY; i++)
         {
             this._cells.Add(new Cell(this, i));
         }
@@ -33,7 +33,7 @@ internal class Row
     /// </summary>
     /// <param name="key">Cell coordinate in the row.</param>
     /// <returns>Cell object.</returns>
-    public Cell GetCell(int key)
+    public Cell GetCell(byte key)
     {
         return this._cells[key];
     }
