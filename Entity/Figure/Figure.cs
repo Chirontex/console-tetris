@@ -1,14 +1,18 @@
 using ConsoleTetris.Exception;
 using System.Collections.Generic;
+using System;
 
 namespace ConsoleTetris.Entity.Figure;
 
 internal abstract class Figure
 {
+    protected delegate void Death();
+
     protected Field _field;
     protected List<Cell> _figureCells;
     protected bool _isInitialized = false;
     protected bool _isDead = false;
+    protected Death _death;
 
     public bool IsDead
     {
@@ -28,6 +32,9 @@ internal abstract class Figure
         this.initializeOnField();
         this.fillCells();
         this._isInitialized = true;
+
+        this._death = this.fillCells;
+        this._death += this.die;
     }
 
     /// <summary>
@@ -35,21 +42,34 @@ internal abstract class Figure
     /// </summary>
     public void Down()
     {
+        if (this._isDead)
+        {
+            throw new DeadFigureException("Attempt to move down a dead figure.");
+        }
+
         this.cleanCells();
 
         List<Cell> newCells = new();
 
         foreach (Cell cell in this._figureCells)
         {
-            Cell? newCell = this._field.GetCell(
-                checked((byte)(cell.GetRow().Y - 1)),
-                cell.X
-            );
+            byte rowKey;
+
+            try
+            {
+                rowKey = checked((byte)(cell.GetRow().Y - 1));
+            }
+            catch (OverflowException)
+            {
+                this._death();
+                return;
+            }
+
+            Cell? newCell = this._field.GetCell(rowKey, cell.X);
 
             if (newCell == null || newCell.IsFilled)
             {
-                this.fillCells();
-                this._isDead = true;
+                this._death();
                 return;
             }
 
@@ -95,5 +115,10 @@ internal abstract class Figure
         {
             cell.IsFilled = false;
         }
+    }
+
+    protected void die()
+    {
+        this._isDead = true;
     }
 }
