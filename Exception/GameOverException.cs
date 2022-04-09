@@ -1,8 +1,6 @@
-using System;
-
 namespace ConsoleTetris.Exception;
 
-public class GameOverException : SystemException
+public class GameOverException : ConsoleTetrisException
 {
     public GameOverException() : base()
     {
