@@ -6,6 +6,7 @@ namespace ConsoleTetris.Entity.Figure;
 
 internal abstract class Figure
 {
+    public delegate void Movement();
     protected delegate void Death();
 
     protected Field _field;
@@ -22,6 +23,8 @@ internal abstract class Figure
         }
     }
 
+    public Movement MovementDelegate { get; set; }
+
     public Figure(Field field)
     {
         this._field = field;
@@ -35,6 +38,8 @@ internal abstract class Figure
 
         this._death = this.fillCells;
         this._death += this.die;
+
+        this.MovementDelegate = this.fillCells;
     }
 
     /// <summary>
@@ -77,7 +82,7 @@ internal abstract class Figure
         }
 
         this._figureCells = newCells;
-        this.fillCells();
+        this.MovementDelegate();
     }
 
     /// <summary>

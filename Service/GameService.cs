@@ -23,28 +23,23 @@ internal class GameService
     public void Run()
     {
         bool gameOver = false;
-        int sleep = 1;
+        int sleep = 1000;
         Figure? figure = null;
 
         while (!gameOver)
         {
-            if (sleep == 0)
+            if (figure == null || figure.IsDead)
             {
-                if (figure == null)
-                {
-                    figure = new Crossbar(this._field);
-                }
+                figure = new Crossbar(this._field);
+                figure.MovementDelegate += this.render;
 
                 this.render();
+            }
+
+            if (sleep == 0)
+            {
                 this._tickCounter++;
-
                 figure.Down();
-
-                if (figure.IsDead)
-                {
-                    figure = null;
-                }
-
                 sleep = 1000;
             }
 
