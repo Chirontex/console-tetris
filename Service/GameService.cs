@@ -41,8 +41,14 @@ internal class GameService
 
         while (!this._gameOver)
         {
-            Thread.Sleep(1);
-            // TODO: реализовать ввод управления
+            Thread.Sleep(150);
+            
+            var input = Console.ReadKey();
+
+            if (input.KeyChar == 's' && !this._figure!.IsDead)
+            {
+                this._figure!.Down();
+            }
         }
     }
 
@@ -53,7 +59,7 @@ internal class GameService
 
         try
         {
-            if (this._figure != null)
+            if (this._figure != null && !this._figure.IsDead)
             {
                 this._figure.Down();
             }
@@ -69,7 +75,7 @@ internal class GameService
             // TODO: Сделать рендер интерфейса завершения игры.
             stateDto.Handle!.Unregister(null);
             this._gameOver = true;
-            return;
+            Environment.Exit(0);
         }
     }
 
