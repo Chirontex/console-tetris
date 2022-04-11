@@ -15,6 +15,7 @@ internal class GameService
     protected ulong _score = 0;
     protected Figure? _figure = null;
     protected bool _gameOver = false;
+    protected bool _inRender = false;
 
     public GameService(Field field)
     {
@@ -41,7 +42,7 @@ internal class GameService
 
         while (!this._gameOver)
         {
-            Thread.Sleep(150);
+            Thread.Sleep(1);
             
             var input = Console.ReadKey();
 
@@ -87,9 +88,18 @@ internal class GameService
 
     protected void render()
     {
+        if (this._inRender)
+        {
+            return;
+        }
+
+        this._inRender = true;
+
         Console.Clear();
         Console.WriteLine($"Time: {TimeHelper.ToTime(this._tickCounter)}");
         Console.WriteLine($"Score: {this._score}");
         Console.Write(this._field.Visualize());
+
+        this._inRender = false;
     }
 }
