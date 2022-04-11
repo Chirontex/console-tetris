@@ -1,5 +1,7 @@
+using ConsoleTetris.Dto;
 using ConsoleTetris.Entity;
 using ConsoleTetris.Entity.Figure;
+using ConsoleTetris.Exception;
 using ConsoleTetris.Helper;
 using System.Threading;
 using System;
@@ -11,6 +13,8 @@ internal class GameService
     protected Field _field;
     protected ulong _tickCounter = 0;
     protected ulong _score = 0;
+    protected Figure? _figure = null;
+    protected bool _gameOver = false;
 
     public GameService(Field field)
     {
@@ -22,31 +26,57 @@ internal class GameService
     /// </summary>
     public void Run()
     {
-        bool gameOver = false;
-        int sleep = 1000;
-        Figure? figure = null;
+        this.initializeFigure();
+        this.render();
 
-        while (!gameOver)
+        AutoResetEvent autoResetEvent = new(false);
+        LoopTaskStateDto state = new();
+        state.Handle = ThreadPool.RegisterWaitForSingleObject(
+            autoResetEvent,
+            new WaitOrTimerCallback(this.loop!),
+            state,
+            1000,
+            false
+        );
+
+        while (!this._gameOver)
         {
-            if (figure == null || figure.IsDead)
-            {
-                figure = new Crossbar(this._field);
-                figure.MovementDelegate += this.render;
+            Thread.Sleep(1);
+            // TODO: реализовать ввод управления
+        }
+    }
 
+    protected void loop(object state, bool timedOut = false)
+    {
+        this._tickCounter++;
+        LoopTaskStateDto stateDto = (LoopTaskStateDto)state;
+
+        try
+        {
+            if (this._figure != null)
+            {
+                this._figure.Down();
+            }
+
+            if (this._figure == null || this._figure.IsDead)
+            {
+                this.initializeFigure();
                 this.render();
             }
-
-            if (sleep == 0)
-            {
-                this._tickCounter++;
-                figure.Down();
-                sleep = 1000;
-            }
-
-            Thread.Sleep(1);
-
-            sleep--;
         }
+        catch (GameOverException)
+        {
+            // TODO: Сделать рендер интерфейса завершения игры.
+            stateDto.Handle!.Unregister(null);
+            this._gameOver = true;
+            return;
+        }
+    }
+
+    protected void initializeFigure()
+    {
+        this._figure = new Crossbar(this._field);
+        this._figure.MovementDelegate += this.render;
     }
 
     protected void render()

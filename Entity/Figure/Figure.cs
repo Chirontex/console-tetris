@@ -7,13 +7,11 @@ namespace ConsoleTetris.Entity.Figure;
 internal abstract class Figure
 {
     public delegate void Movement();
-    protected delegate void Death();
 
     protected Field _field;
     protected List<Cell> _figureCells;
     protected bool _isInitialized = false;
     protected bool _isDead = false;
-    protected Death _death;
 
     public bool IsDead
     {
@@ -35,9 +33,6 @@ internal abstract class Figure
         this.initializeOnField();
         this.fillCells();
         this._isInitialized = true;
-
-        this._death = this.fillCells;
-        this._death += this.die;
 
         this.MovementDelegate = this.fillCells;
     }
@@ -66,22 +61,26 @@ internal abstract class Figure
             }
             catch (OverflowException)
             {
-                this._death();
-                return;
+                this._isDead = true;
+                break;
             }
 
             Cell? newCell = this._field.GetCell(rowKey, cell.X);
 
             if (newCell == null || newCell.IsFilled)
             {
-                this._death();
-                return;
+                this._isDead = true;
+                break;
             }
 
             newCells.Add(newCell);
         }
 
-        this._figureCells = newCells;
+        if (!this._isDead)
+        {
+            this._figureCells = newCells;
+        }
+
         this.MovementDelegate();
     }
 
@@ -120,10 +119,5 @@ internal abstract class Figure
         {
             cell.IsFilled = false;
         }
-    }
-
-    protected void die()
-    {
-        this._isDead = true;
     }
 }
