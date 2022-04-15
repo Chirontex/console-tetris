@@ -21,7 +21,8 @@ internal abstract class Figure
         }
     }
 
-    public Movement MovementDelegate { get; set; }
+    public Movement StartMovement { get; set; }
+    public Movement EndMovement { get; set; }
 
     public Figure(Field field)
     {
@@ -34,7 +35,14 @@ internal abstract class Figure
         this.fillCells();
         this._isInitialized = true;
 
-        this.MovementDelegate = this.fillCells;
+        this.StartMovement = () => {
+            if (this._isDead) {
+                throw new DeadFigureException("Attempt to move down a dead figure.");
+            }
+        };
+        this.StartMovement += this.cleanCells;
+
+        this.EndMovement = this.fillCells;
     }
 
     /// <summary>
@@ -42,12 +50,7 @@ internal abstract class Figure
     /// </summary>
     public void Down()
     {
-        if (this._isDead)
-        {
-            throw new DeadFigureException("Attempt to move down a dead figure.");
-        }
-
-        this.cleanCells();
+        this.StartMovement();
 
         List<Cell> newCells = new();
 
@@ -81,7 +84,7 @@ internal abstract class Figure
             this._figureCells = newCells;
         }
 
-        this.MovementDelegate();
+        this.EndMovement();
     }
 
     /// <summary>

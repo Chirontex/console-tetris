@@ -83,7 +83,7 @@ internal class GameService
     protected void initializeFigure()
     {
         this._figure = new Crossbar(this._field);
-        this._figure.MovementDelegate += this.render;
+        this._figure.EndMovement += this.render;
     }
 
     protected void render()
