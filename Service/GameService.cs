@@ -46,9 +46,22 @@ internal class GameService
             
             var input = Console.ReadKey();
 
-            if (input.KeyChar == 's' && !this._figure!.IsDead)
+            if (!this._figure!.IsDead)
             {
-                this._figure!.Down();
+                switch (input.KeyChar)
+                {
+                    case 'a':
+                        this._figure!.Left();
+                        break;
+
+                    case 's':
+                        this._figure!.Down();
+                        break;
+
+                    case 'd':
+                        this._figure!.Right();
+                        break;
+                }
             }
         }
     }

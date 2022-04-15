@@ -50,38 +50,65 @@ internal abstract class Figure
     /// </summary>
     public void Down()
     {
+        this.move(-1, 0);
+    }
+
+    /// <summary>
+    /// Move figure left.
+    /// </summary>
+    public void Left()
+    {
+        this.move(0, -1, false);
+    }
+
+    /// <summary>
+    /// Move figure right.
+    /// </summary>
+    public void Right()
+    {
+        this.move(0, 1, false);
+    }
+
+    protected void move(sbyte rowMod, sbyte cellMod, bool causeToDeath = true)
+    {
         this.StartMovement();
 
         List<Cell> newCells = new();
+        bool success = true;
+        byte rowKey;
+        byte cellKey;
 
         foreach (Cell cell in this._figureCells)
         {
-            byte rowKey;
-
             try
             {
-                rowKey = checked((byte)(cell.GetRow().Y - 1));
+                rowKey = checked((byte)(cell.GetRow().Y + rowMod));
+                cellKey = checked((byte)(cell.X + cellMod));
             }
             catch (OverflowException)
             {
-                this._isDead = true;
+                success = false;
                 break;
             }
 
-            Cell? newCell = this._field.GetCell(rowKey, cell.X);
+            Cell? newCell = this._field.GetCell(rowKey, cellKey);
 
             if (newCell == null || newCell.IsFilled)
             {
-                this._isDead = true;
+                success = false;
                 break;
             }
 
             newCells.Add(newCell);
         }
 
-        if (!this._isDead)
+        if (success)
         {
             this._figureCells = newCells;
+        }
+        else if (causeToDeath)
+        {
+            this._isDead = true;
         }
 
         this.EndMovement();
