@@ -27,11 +27,19 @@ internal abstract class Figure
     public Figure(Field field)
     {
         this._field = field;
-
         this.checkEntryPointCell();
 
-        this._figureCells = new();
-        this.initializeOnField();
+        List<Cell> cells = this.initializeOnField();
+
+        foreach (Cell cell in cells)
+        {
+            if (cell.IsFilled)
+            {
+                throw new GameOverException("A figure field is already filled.");
+            }
+        }
+
+        this._figureCells = cells;
         this.fillCells();
         this._isInitialized = true;
 
@@ -117,7 +125,8 @@ internal abstract class Figure
     /// <summary>
     /// Setting the figure on the field.
     /// </summary>
-    abstract protected void initializeOnField();
+    /// <return>List of cells.</return>
+    abstract protected List<Cell> initializeOnField();
 
     protected void checkEntryPointCell()
     {

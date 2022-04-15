@@ -1,4 +1,4 @@
-using ConsoleTetris.Exception;
+using System.Collections.Generic;
 
 namespace ConsoleTetris.Entity.Figure;
 
@@ -8,11 +8,12 @@ internal class Crossbar : Figure
     {
     }
 
-    override protected void initializeOnField()
+    override protected List<Cell> initializeOnField()
     {
         Cell entryPointCell = this.getEntryPointCell();
+        List<Cell> cells = new();
 
-        this._figureCells.Add(entryPointCell);
+        cells.Add(entryPointCell);
 
         for (sbyte i = -2; i <= 1; i++)
         {
@@ -26,12 +27,9 @@ internal class Crossbar : Figure
                 checked((byte)(entryPointCell.X + i))
             )!;
 
-            if (cell.IsFilled)
-            {
-                throw new GameOverException("A figure field is already filled.");
-            }
-
-            this._figureCells.Add(cell);
+            cells.Add(cell);
         }
+
+        return cells;
     }
 }
