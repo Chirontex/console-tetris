@@ -1,5 +1,6 @@
 using ConsoleTetris.Exception;
 using System.Collections.Generic;
+using System.Linq;
 using System;
 
 namespace ConsoleTetris.Entity.Figure;
@@ -142,6 +143,36 @@ internal abstract class Figure
             Field.ROWS_QUANTITY - 1,
             Row.CELLS_QUANTITY/2
         )!;
+    }
+
+    protected Cell getHighestMediumCell()
+    {
+        SortedDictionary<byte, List<Cell>> sortedByRows = new();
+        byte rowKey;
+
+        foreach (Cell cell in this._figureCells)
+        {
+            rowKey = cell.GetRow().Y;
+
+            if (!sortedByRows.ContainsKey(rowKey))
+            {
+                sortedByRows.Add(rowKey, new List<Cell> {});
+            }
+
+            sortedByRows[rowKey].Add(cell);
+        }
+
+        byte highestRowKey = sortedByRows.Keys.Last();
+        byte mediumCellKey = 0;
+
+        foreach (Cell cell in sortedByRows[highestRowKey])
+        {
+            mediumCellKey += cell.X;
+        }
+
+        mediumCellKey = (byte)(mediumCellKey / checked((byte)sortedByRows[highestRowKey].Count));
+
+        return this._field.GetCell(highestRowKey, mediumCellKey)!;
     }
 
     protected void fillCells()
