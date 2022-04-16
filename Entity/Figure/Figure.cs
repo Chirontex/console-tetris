@@ -97,8 +97,8 @@ internal abstract class Figure
 
         newCells.Add(mediumCell);
 
-        byte rowKey;
-        byte cellKey;
+        sbyte rowKey;
+        sbyte cellKey;
         bool success = true;
 
         foreach (Cell cell in this._figureCells)
@@ -110,19 +110,30 @@ internal abstract class Figure
 
             try
             {
-                rowKey = checked((byte)(mediumCell.GetRow().Y + checked((sbyte)(mediumCell.X - cell.X))));
-                cellKey = checked((byte)(mediumCell.X + checked((sbyte)(cell.GetRow().Y - mediumCell.GetRow().Y))));
+                rowKey = checked((sbyte)(mediumCell.GetRow().Y + checked((sbyte)(mediumCell.X - cell.X))));
+                cellKey = checked((sbyte)(mediumCell.X + checked((sbyte)(cell.GetRow().Y - mediumCell.GetRow().Y))));
+
+                if (cellKey < 0)
+                {
+                    this.EndMovement();
+                    this.Right();
+                    this.Rotate();
+
+                    return;
+                }
+
+                if (rowKey < 0)
+                {
+                    break;
+                }
             }
             catch (OverflowException)
             {
-                this.EndMovement();
-                this.Right();
-                this.Rotate();
-
+                success = false;
                 return;
             }
 
-            Cell? newCell = this._field.GetCell(rowKey, cellKey);
+            Cell? newCell = this._field.GetCell(checked((byte)rowKey), checked((byte)cellKey));
 
             if (newCell == null || newCell.IsFilled)
             {
