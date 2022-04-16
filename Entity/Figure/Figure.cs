@@ -135,6 +135,26 @@ internal abstract class Figure
 
             Cell? newCell = this._field.GetCell(checked((byte)rowKey), checked((byte)cellKey));
 
+            if (newCell == null &&
+                cellKey >= Row.CELLS_QUANTITY &&
+                rowKey <= Field.ROWS_QUANTITY)
+            {
+                this.EndMovement();
+                this.Left();
+                this.Rotate();
+
+                return;
+            }
+
+            if (newCell == null && rowKey >= Field.ROWS_QUANTITY)
+            {
+                this.EndMovement();
+                this.Down();
+                this.Rotate();
+
+                return;
+            }
+
             if (newCell == null || newCell.IsFilled)
             {
                 success = false;
