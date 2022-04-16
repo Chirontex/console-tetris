@@ -108,10 +108,12 @@ internal class GameService
 
         this._inRender = true;
 
+        string content = $"Time: {this._tickCounter.ConvertToTime()}\n";
+        content += $"Score: {this._score}\n";
+        content += this._field.Visualize();
+
         Console.Clear();
-        Console.WriteLine($"Time: {this._tickCounter.ConvertToTime()}");
-        Console.WriteLine($"Score: {this._score}");
-        Console.Write(this._field.Visualize());
+        Console.Write(content);
 
         this._inRender = false;
     }
