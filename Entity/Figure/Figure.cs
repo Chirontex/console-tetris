@@ -83,7 +83,14 @@ internal abstract class Figure
     /// </summary>
     public void Rotate()
     {
-        this.StartMovement();
+        try
+        {
+            this.StartMovement();
+        }
+        catch (DeadFigureException)
+        {
+            return;
+        }
 
         List<Cell> newCells = new();
         Cell mediumCell = this.getMediumCell();
@@ -136,7 +143,14 @@ internal abstract class Figure
 
     protected void move(sbyte rowMod, sbyte cellMod, bool causeToDeath = true)
     {
-        this.StartMovement();
+        try
+        {
+            this.StartMovement();
+        }
+        catch (DeadFigureException)
+        {
+            return;
+        }
 
         List<Cell> newCells = new();
         bool success = true;
