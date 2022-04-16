@@ -2,7 +2,7 @@ using ConsoleTetris.Dto;
 using ConsoleTetris.Entity;
 using ConsoleTetris.Entity.Figure;
 using ConsoleTetris.Exception;
-using ConsoleTetris.Helper;
+using ConsoleTetris.Extension;
 using System.Threading;
 using System;
 
@@ -109,7 +109,7 @@ internal class GameService
         this._inRender = true;
 
         Console.Clear();
-        Console.WriteLine($"Time: {TimeHelper.ToTime(this._tickCounter)}");
+        Console.WriteLine($"Time: {this._tickCounter.ConvertToTime()}");
         Console.WriteLine($"Score: {this._score}");
         Console.Write(this._field.Visualize());
 

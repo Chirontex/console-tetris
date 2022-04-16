@@ -1,14 +1,18 @@
-namespace ConsoleTetris.Helper;
+namespace ConsoleTetris.Extension;
 
-internal class TimeHelper
+internal static class UlongTimeExtension
 {
     /// <summary>
-    /// Returns a time representation of integer value.
+    /// Returns a time representation of ulong value as seconds.
     /// </summary>
     /// <param name="value">Seconds.</param>
     /// <returns>Normal time representation.</returns>
-    public static string ToTime(ulong value)
+    public static string ConvertToTime(this ulong value)
     {
+        var handleValue = (ulong value) => {
+            return $"{(value < 10 ? "0" : "")}{value}";
+        };
+
         if (value < 60)
         {
             return $"00:00:{handleValue(value)}";
@@ -25,10 +29,5 @@ internal class TimeHelper
         ulong seconds = value - 60 * (value / 60);
 
         return $"{handleValue(hours)}:{handleValue(minutes)}:{handleValue(seconds)}";
-    }
-
-    protected static string handleValue(ulong value)
-    {
-        return $"{(value < 10 ? "0" : "")}{value}";
     }
 }
