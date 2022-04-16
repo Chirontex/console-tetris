@@ -86,9 +86,9 @@ internal abstract class Figure
         this.StartMovement();
 
         List<Cell> newCells = new();
-        Cell highestMediumCell = this.getHighestMediumCell();
+        Cell mediumCell = this.getMediumCell();
 
-        newCells.Add(highestMediumCell);
+        newCells.Add(mediumCell);
 
         byte rowKey;
         byte cellKey;
@@ -96,15 +96,15 @@ internal abstract class Figure
 
         foreach (Cell cell in this._figureCells)
         {
-            if (cell == highestMediumCell)
+            if (cell == mediumCell)
             {
                 continue;
             }
 
             try
             {
-                rowKey = checked((byte)(highestMediumCell.GetRow().Y + checked((sbyte)(highestMediumCell.X - cell.X))));
-                cellKey = checked((byte)(highestMediumCell.X + checked((sbyte)(cell.GetRow().Y - highestMediumCell.GetRow().Y))));
+                rowKey = checked((byte)(mediumCell.GetRow().Y + checked((sbyte)(mediumCell.X - cell.X))));
+                cellKey = checked((byte)(mediumCell.X + checked((sbyte)(cell.GetRow().Y - mediumCell.GetRow().Y))));
             }
             catch (OverflowException)
             {
@@ -201,7 +201,7 @@ internal abstract class Figure
         )!;
     }
 
-    protected Cell getHighestMediumCell()
+    protected Cell getMediumCell()
     {
         SortedDictionary<byte, List<Cell>> sortedByRows = new();
         byte rowKey;
@@ -218,17 +218,24 @@ internal abstract class Figure
             sortedByRows[rowKey].Add(cell);
         }
 
-        byte highestRowKey = sortedByRows.Keys.Last();
+        byte mediumRowKey = 0;
+
+        foreach (byte rk in sortedByRows.Keys)
+        {
+            mediumRowKey += rk;
+        }
+
+        mediumRowKey = (byte)(mediumRowKey / checked((byte)sortedByRows.Count));
         byte mediumCellKey = 0;
 
-        foreach (Cell cell in sortedByRows[highestRowKey])
+        foreach (Cell cell in sortedByRows[mediumRowKey])
         {
             mediumCellKey += cell.X;
         }
 
-        mediumCellKey = (byte)(mediumCellKey / checked((byte)sortedByRows[highestRowKey].Count));
+        mediumCellKey = (byte)(mediumCellKey / checked((byte)sortedByRows[mediumRowKey].Count));
 
-        return this._field.GetCell(highestRowKey, mediumCellKey)!;
+        return this._field.GetCell(mediumRowKey, mediumCellKey)!;
     }
 
     protected void fillCells()
