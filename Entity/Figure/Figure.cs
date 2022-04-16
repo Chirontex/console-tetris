@@ -108,8 +108,11 @@ internal abstract class Figure
             }
             catch (OverflowException)
             {
-                success = false;
-                break;
+                this.EndMovement();
+                this.Right();
+                this.Rotate();
+
+                return;
             }
 
             Cell? newCell = this._field.GetCell(rowKey, cellKey);
