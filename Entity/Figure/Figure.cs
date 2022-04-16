@@ -78,6 +78,59 @@ internal abstract class Figure
         this.move(0, 1, false);
     }
 
+    /// <summary>
+    /// Rotate the figure.
+    /// </summary>
+    public void Rotate()
+    {
+        this.StartMovement();
+
+        List<Cell> newCells = new();
+        Cell highestMediumCell = this.getHighestMediumCell();
+
+        newCells.Add(highestMediumCell);
+
+        byte rowKey;
+        byte cellKey;
+        bool success = true;
+
+        foreach (Cell cell in this._figureCells)
+        {
+            if (cell == highestMediumCell)
+            {
+                continue;
+            }
+
+            try
+            {
+                rowKey = checked((byte)(highestMediumCell.GetRow().Y + checked((sbyte)(highestMediumCell.X - cell.X))));
+                cellKey = checked((byte)(highestMediumCell.X + checked((sbyte)(cell.GetRow().Y - highestMediumCell.GetRow().Y))));
+            }
+            catch (OverflowException)
+            {
+                success = false;
+                break;
+            }
+
+            Cell? newCell = this._field.GetCell(rowKey, cellKey);
+
+            if (newCell == null || newCell.IsFilled)
+            {
+                success = false;
+                break;
+            }
+
+            newCells.Add(newCell);
+        }
+
+        if (success)
+        {
+            this._figureCells = newCells;
+        }
+
+        this.EndMovement();
+    }
+
     protected void move(sbyte rowMod, sbyte cellMod, bool causeToDeath = true)
     {
         this.StartMovement();

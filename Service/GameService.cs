@@ -61,6 +61,10 @@ internal class GameService
                     case 'd':
                         this._figure!.Right();
                         break;
+
+                    case 'w':
+                        this._figure!.Rotate();
+                        break;
                 }
             }
         }
