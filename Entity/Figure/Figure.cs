@@ -1,6 +1,6 @@
+using ConsoleTetris.Dto;
 using ConsoleTetris.Exception;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 
 namespace ConsoleTetris.Entity.Figure;
@@ -93,75 +93,28 @@ internal abstract class Figure
         }
 
         List<Cell> newCells = new();
-        Cell mediumCell = this.getMediumCell();
-
-        newCells.Add(mediumCell);
-
-        sbyte rowKey;
-        sbyte cellKey;
+        List<CellDto> cellDtoList = this.calculateRotate();
         bool success = true;
 
-        foreach (Cell cell in this._figureCells)
+        foreach (CellDto cellDto in cellDtoList)
         {
-            if (cell == mediumCell)
-            {
-                continue;
-            }
-
             try
             {
-                rowKey = checked((sbyte)(mediumCell.GetRow().Y + checked((sbyte)(mediumCell.X - cell.X))));
-                cellKey = checked((sbyte)(mediumCell.X + checked((sbyte)(cell.GetRow().Y - mediumCell.GetRow().Y))));
+                Cell? newCell = this._field.GetCell(checked((byte)cellDto.Y), checked((byte)cellDto.X));
 
-                if (cellKey < 0)
+                if (newCell == null || newCell.IsFilled)
                 {
-                    this.EndMovement();
-                    this.Right();
-                    this.Rotate();
-
-                    return;
-                }
-
-                if (rowKey < 0)
-                {
+                    success = false;
                     break;
                 }
+
+                newCells.Add(newCell);
             }
             catch (OverflowException)
             {
                 success = false;
-                return;
-            }
-
-            Cell? newCell = this._field.GetCell(checked((byte)rowKey), checked((byte)cellKey));
-
-            if (newCell == null &&
-                cellKey >= Row.CELLS_QUANTITY &&
-                rowKey <= Field.ROWS_QUANTITY)
-            {
-                this.EndMovement();
-                this.Left();
-                this.Rotate();
-
-                return;
-            }
-
-            if (newCell == null && rowKey >= Field.ROWS_QUANTITY)
-            {
-                this.EndMovement();
-                this.Down();
-                this.Rotate();
-
-                return;
-            }
-
-            if (newCell == null || newCell.IsFilled)
-            {
-                success = false;
                 break;
             }
-
-            newCells.Add(newCell);
         }
 
         if (success)
@@ -297,5 +250,31 @@ internal abstract class Figure
         {
             cell.IsFilled = false;
         }
+    }
+
+    // TODO: Добавить функционал вычисления отталкивания
+    protected List<CellDto> calculateRotate()
+    {
+        sbyte rowKey;
+        sbyte cellKey;
+        Cell mediumCell = this.getMediumCell();
+        List<CellDto> result = new List<CellDto> {
+            new CellDto((sbyte)mediumCell.X, (sbyte)mediumCell.GetRow().Y),
+        };
+
+        foreach (Cell cell in this._figureCells)
+        {
+            if (cell == mediumCell)
+            {
+                continue;
+            }
+
+            rowKey = checked((sbyte)(mediumCell.GetRow().Y + checked((sbyte)(mediumCell.X - cell.X))));
+            cellKey = checked((sbyte)(mediumCell.X + checked((sbyte)(cell.GetRow().Y - mediumCell.GetRow().Y))));
+
+            result.Add(new CellDto(cellKey, rowKey));
+        }
+
+        return result;
     }
 }
